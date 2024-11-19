@@ -48,302 +48,66 @@ df = df_orig[:idx]
 delta_series = df.iloc[-1] - df.iloc[-2]
 dic_figs = {col: plot_line(df, col) for col in df.columns}
 
+show_pane = True
 
 ### Layout da página
 page = """
-# ReliApp - Predictive Maintenance and Reliability Indicators
-___
-<|{idx}|number|min=100|max={df_orig.index.max()}|>
-___
+<|toggle|theme|>
 
-<|layout|columns=1 1|
+<|layout|columns=300px 1fr|
+
+<|padding=10px|
+### Change the number to simulate time elapsing:
+<|{idx}|number|min=100|max={df_orig.index.max()}|>
+|>
+
+<|padding=50px|
+# ReliApp - Predictive Maintenance and Reliability Indicators
+<|layout|columns=1 1 1 1|
 
 <|part|render=True|
-## lp
-<|{df['lp'].values[-1]}|metric|delta={delta_series['lp']}|bar_color=gray|min={df['lp'].min()}|max={df['lp'].max()}|>
+## lp - Lever position
+<|{df['lp'].values[-1]}|metric|delta={delta_series['lp']}|bar_color=darkgoldenrod|min={df['lp'].min()}|max={df['lp'].max()}|>
 |>
 
 <|part|render=True|
-## lp time evolution
+## v - Ship speed
+<|{df['v'].values[-1]}|metric|delta={delta_series['v']}|bar_color=darkgoldenrod|min={df['v'].min()}|max={df['v'].max()}|>
+|>
+
+<|part|render=True|
+## P48 - HP exit pressure
+<|{df['P48'].values[-1]}|metric|delta={delta_series['P48']}|bar_color=darkgoldenrod|min={df['P48'].min()}|max={df['P48'].max()}|>
+|>
+
+
+<|part|render=True|
+## T48 - HP exit temperature
+<|{df['T48'].values[-1]}|metric|delta={delta_series['T48']}|bar_color=darkgoldenrod|min={df['T48'].min()}|max={df['T48'].max()}|>
+|>
+|>
+
+<|layout|columns=1 1 1 1|
+<|part|render=True|
+## lp history
 <|chart|figure={dic_figs['lp']}|>
 |>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
 <|part|render=True|
-## v
-<|{df['v'].values[-1]}|metric|delta={delta_series['v']}|bar_color=gray|min={df['v'].min()}|max={df['v'].max()}|>
-|>
-
-<|part|render=True|
-## v time evolution
+## v history
 <|chart|figure={dic_figs['v']}|>
 |>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
 <|part|render=True|
-## GTT
-<|{df['GTT'].values[-1]}|metric|delta={delta_series['GTT']}|bar_color=gray|min={df['GTT'].min()}|max={df['GTT'].max()}|>
+## P48 history
+<|chart|figure={dic_figs['P48']}|>
 |>
-
 <|part|render=True|
-## GTT time evolution
-<|chart|figure={dic_figs['GTT']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## GTn
-<|{df['GTn'].values[-1]}|metric|delta={delta_series['GTn']}|bar_color=gray|min={df['GTn'].min()}|max={df['GTn'].max()}|>
-|>
-
-<|part|render=True|
-## GTn time evolution
-<|chart|figure={dic_figs['GTn']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## GGn
-<|{df['GGn'].values[-1]}|metric|delta={delta_series['GGn']}|bar_color=gray|min={df['GGn'].min()}|max={df['GGn'].max()}|>
-|>
-
-<|part|render=True|
-## GGn time evolution
-<|chart|figure={dic_figs['GGn']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## Ts
-<|{df['Ts'].values[-1]}|metric|delta={delta_series['Ts']}|bar_color=gray|min={df['Ts'].min()}|max={df['Ts'].max()}|>
-|>
-
-<|part|render=True|
-## Ts time evolution
-<|chart|figure={dic_figs['Ts']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## Tp
-<|{df['Tp'].values[-1]}|metric|delta={delta_series['Tp']}|bar_color=gray|min={df['Tp'].min()}|max={df['Tp'].max()}|>
-|>
-
-<|part|render=True|
-## Tp time evolution
-<|chart|figure={dic_figs['Tp']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## T48
-<|{df['T48'].values[-1]}|metric|delta={delta_series['T48']}|bar_color=gray|min={df['T48'].min()}|max={df['T48'].max()}|>
-|>
-
-<|part|render=True|
-## T48 time evolution
+## T48 history
 <|chart|figure={dic_figs['T48']}|>
 |>
 
 |>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## T1
-<|{df['T1'].values[-1]}|metric|delta={delta_series['T1']}|bar_color=gray|min={df['T1'].min()}|max={df['T1'].max()}|>
 |>
-
-<|part|render=True|
-## T1 time evolution
-<|chart|figure={dic_figs['T1']}|>
 |>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## T2
-<|{df['T2'].values[-1]}|metric|delta={delta_series['T2']}|bar_color=gray|min={df['T2'].min()}|max={df['T2'].max()}|>
-|>
-
-<|part|render=True|
-## T2 time evolution
-<|chart|figure={dic_figs['T2']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## P48
-<|{df['P48'].values[-1]}|metric|delta={delta_series['P48']}|bar_color=gray|min={df['P48'].min()}|max={df['P48'].max()}|>
-|>
-
-<|part|render=True|
-## P48 time evolution
-<|chart|figure={dic_figs['P48']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## P1
-<|{df['P1'].values[-1]}|metric|delta={delta_series['P1']}|bar_color=gray|min={df['P1'].min()}|max={df['P1'].max()}|>
-|>
-
-<|part|render=True|
-## P1 time evolution
-<|chart|figure={dic_figs['P1']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## P2
-<|{df['P2'].values[-1]}|metric|delta={delta_series['P2']}|bar_color=gray|min={df['P2'].min()}|max={df['P2'].max()}|>
-|>
-
-<|part|render=True|
-## P2 time evolution
-<|chart|figure={dic_figs['P2']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## Pexh
-<|{df['Pexh'].values[-1]}|metric|delta={delta_series['Pexh']}|bar_color=gray|min={df['Pexh'].min()}|max={df['Pexh'].max()}|>
-|>
-
-<|part|render=True|
-## Pexh time evolution
-<|chart|figure={dic_figs['Pexh']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## TIC
-<|{df['TIC'].values[-1]}|metric|delta={delta_series['TIC']}|bar_color=gray|min={df['TIC'].min()}|max={df['TIC'].max()}|>
-|>
-
-<|part|render=True|
-## TIC time evolution
-<|chart|figure={dic_figs['TIC']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## mf
-<|{df['mf'].values[-1]}|metric|delta={delta_series['mf']}|bar_color=gray|min={df['mf'].min()}|max={df['mf'].max()}|>
-|>
-
-<|part|render=True|
-## mf time evolution
-<|chart|figure={dic_figs['mf']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## kMc
-<|{df['kMc'].values[-1]}|metric|delta={delta_series['kMc']}|bar_color=gray|min={df['kMc'].min()}|max={df['kMc'].max()}|>
-|>
-
-<|part|render=True|
-## kMc time evolution
-<|chart|figure={dic_figs['kMc']}|>
-|>
-
-|>
-___
-
-
-<|layout|columns=1 1|
-
-<|part|render=True|
-## kMt
-<|{df['kMt'].values[-1]}|metric|delta={delta_series['kMt']}|bar_color=gray|min={df['kMt'].min()}|max={df['kMt'].max()}|>
-|>
-
-<|part|render=True|
-## kMt time evolution
-<|chart|figure={dic_figs['kMt']}|>
-|>
-
-|>
-___
-
-        
 
 """
 
@@ -351,7 +115,12 @@ if __name__ == "__main__":
 
     Gui(page=page).run(port=8000, host="0.0.0.0", favicon='wrench.png', title="ReliApp", watermark='')
 
-''''
+'''
+<|{show_pane}|pane|anchor=left|width=220|active=False|>
+Change the number to simulate the time elapsing:
+<|{idx}|number|min=100|max={df_orig.index.max()}|>
+|>
+
 ## Slider
 value_slider = 9
 
@@ -370,4 +139,8 @@ threshold = 60
 delta = value_gauge - threshold
 
 <|{value_gauge}|slider|min=0|max=100|step=1|>
+
+
+<|{show_pane}|pane|anchor=left|width=200|active=True|
+|>
 '''
