@@ -63,52 +63,21 @@ page = """
 
 <|padding=50px|
 # ReliApp - Predictive Maintenance and Reliability Indicators
-<|layout|columns=1 1 1 1|
-
+<|layout|columns=1 1|
 <|part|render=True|
-## lp - Lever position
+### lp - Lever position
 <|{df['lp'].values[-1]}|metric|delta={delta_series['lp']}|bar_color=darkgoldenrod|min={df['lp'].min()}|max={df['lp'].max()}|>
 |>
 
 <|part|render=True|
-## v - Ship speed
-<|{df['v'].values[-1]}|metric|delta={delta_series['v']}|bar_color=darkgoldenrod|min={df['v'].min()}|max={df['v'].max()}|>
-|>
-
-<|part|render=True|
-## P48 - HP exit pressure
-<|{df['P48'].values[-1]}|metric|delta={delta_series['P48']}|bar_color=darkgoldenrod|min={df['P48'].min()}|max={df['P48'].max()}|>
-|>
-
-
-<|part|render=True|
-## T48 - HP exit temperature
-<|{df['T48'].values[-1]}|metric|delta={delta_series['T48']}|bar_color=darkgoldenrod|min={df['T48'].min()}|max={df['T48'].max()}|>
-|>
-|>
-
-<|layout|columns=1 1 1 1|
-<|part|render=True|
-## lp history
+### lp history
 <|chart|figure={dic_figs['lp']}|>
 |>
-<|part|render=True|
-## v history
-<|chart|figure={dic_figs['v']}|>
-|>
-<|part|render=True|
-## P48 history
-<|chart|figure={dic_figs['P48']}|>
-|>
-<|part|render=True|
-## T48 history
-<|chart|figure={dic_figs['T48']}|>
-|>
 
 |>
 |>
-|>
 
+|>
 """
 
 if __name__ == "__main__":
@@ -139,8 +108,38 @@ threshold = 60
 delta = value_gauge - threshold
 
 <|{value_gauge}|slider|min=0|max=100|step=1|>
-
-
 <|{show_pane}|pane|anchor=left|width=200|active=True|
 |>
+
+<|part|render=True|
+### P48 - HP exit pressure
+<|{df['P48'].values[-1]}|metric|delta={delta_series['P48']}|bar_color=darkgoldenrod|min={df['P48'].min()}|max={df['P48'].max()}|>
+|>
+
+<|part|render=True|
+### T48 - HP exit temperature
+<|{df['T48'].values[-1]}|metric|delta={delta_series['T48']}|bar_color=darkgoldenrod|min={df['T48'].min()}|max={df['T48'].max()}|>
+|>
+
+<|part|render=True|
+### P48 history
+<|chart|figure={dic_figs['P48']}|>
+|>
+<|part|render=True|
+### T48 history
+<|chart|figure={dic_figs['T48']}|>
+|>
+
+<|layout|columns=1 1|
+
+<|part|render=True|
+### v - Ship speed
+<|{df['v'].values[-1]}|metric|delta={delta_series['v']}|bar_color=darkgoldenrod|min={df['v'].min()}|max={df['v'].max()}|>
+|>
+
+<|part|render=True|
+### v history
+<|chart|figure={dic_figs['v']}|>
+|>
+
 '''
