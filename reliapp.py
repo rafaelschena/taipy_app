@@ -17,6 +17,33 @@ def plot_line(df, col):
                     )
     return fig
 
+def create_gauge(serie):
+    min = serie.min()
+    max = serie.max()
+    fig = go.Figure(go.Indicator(
+    mode = "gauge+number+delta",
+    value = serie.values[-1],
+    delta = {'reference': serie.values[-2]},
+    gauge={
+        "axis": {"range": [min, max]},
+        "bar": {"color": "blue"},
+        "steps": [
+            {"range": [min, 0.5*max], "color": "lightgreen"},
+            {"range": [0.5*max, 0.8*max], "color": "yellow"},
+            {"range": [0.8*max, max], "color": "red"}
+        ],
+        # "threshold": {
+        #     "line": {"color": "black", "width": 4},
+        #     "value": 90
+        # }
+    }
+    # title = {'text': text},
+    # domain = {'x': [0, 1], 'y': [0, 1]}
+    ))
+
+    return fig
+
+
 
 def on_change(state, var_name, var_value):
     if var_name == "value_gauge":
@@ -33,8 +60,9 @@ def on_change(state, var_name, var_value):
         return
     elif var_name == "idx":
         state.df = state.df_orig[:int(state.idx)]
-        state.delta_series = state.df.iloc[-1] - state.df.iloc[-2]
+        # state.delta_series = state.df.iloc[-1] - state.df.iloc[-2]
         state.dic_figs = {col: plot_line(state.df, col) for col in state.df.columns}
+        state.dic_gauges = {col: create_gauge(state.df[col]) for col in state.df.columns}
         return
 
 def senoidal_data(freq=1, ampl=1, phase=0):
@@ -45,8 +73,9 @@ def senoidal_data(freq=1, ampl=1, phase=0):
 df_orig = load_data_naval_pdm()
 idx=100
 df = df_orig[:idx]
-delta_series = df.iloc[-1] - df.iloc[-2]
+# delta_series = df.iloc[-1] - df.iloc[-2]
 dic_figs = {col: plot_line(df, col) for col in df.columns}
+dic_gauges = {col: create_gauge(df[col]) for col in df.columns}
 
 show_pane = True
 
@@ -64,14 +93,21 @@ page = """
 <|padding=50px|
 # ReliApp - Predictive Maintenance and Reliability Indicators
 <|layout|columns=1 1|
+
 <|part|render=True|
 ### lp - Lever position
-<|{df['lp'].values[-1]}|metric|delta={delta_series['lp']}|bar_color=darkgoldenrod|min={df['lp'].min()}|max={df['lp'].max()}|>
+<|chart|figure={dic_gauges['lp']}|height=300px|>
+
+### lp history
+<|chart|figure={dic_figs['lp']}|height=300px|>
 |>
 
 <|part|render=True|
-### lp history
-<|chart|figure={dic_figs['lp']}|>
+### P48 - HP exit pressure
+<|chart|figure={dic_gauges['P48']}|height=300px|>
+
+### P48 - History
+<|chart|figure={dic_figs['P48']}|height=300px|>
 |>
 
 |>
